@@ -10,6 +10,7 @@ import {
   MdOutlineKeyboardArrowDown,
   MdClose,
 } from "react-icons/md";
+import { TbLayoutBoardSplit } from "react-icons/tb";
 
 export const icons = {
   dotsIcon: BsThreeDotsVertical,
@@ -20,4 +21,5 @@ export const icons = {
   visibleIcon: MdVisibility,
   arrowDownIcon: MdOutlineKeyboardArrowDown,
   closeIcon: MdClose,
+  boardIcon: TbLayoutBoardSplit,
 };

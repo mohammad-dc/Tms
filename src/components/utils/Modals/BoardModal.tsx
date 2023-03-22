@@ -11,12 +11,14 @@ import { BoardForm } from "../../form/forms/BoardForm";
 
 interface IBoardModalProps {
   mode?: "add" | "edit";
+  id?: number;
   isOpen: boolean;
   onClose: () => void;
 }
 
 export const BoardModal = ({
   mode = "add",
+  id,
   isOpen,
   onClose,
 }: IBoardModalProps) => {

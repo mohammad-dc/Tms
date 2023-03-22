@@ -8,8 +8,11 @@ import {
   Text,
   VStack,
 } from "@chakra-ui/react";
-import React from "react";
+import React, { useState } from "react";
 import { deleteMessageDialog } from "../../../core/helpers/deleteMessageDialog";
+import { deleteBoard } from "../../../core/services/boardServices";
+import { deleteTask } from "../../../core/services/tasksServices";
+import { useSendQuery } from "../../../hooks";
 import { Button } from "../../form/buttons/Button";
 import { Typography } from "../Typography";
 
@@ -17,13 +20,16 @@ interface IDeleteModalProps {
   mode?: "board" | "task";
   isOpen: boolean;
   onClose: () => void;
+  id: number;
 }
 
 export const DeleteModal = ({
   mode = "board",
+  id,
   isOpen,
   onClose,
 }: IDeleteModalProps) => {
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   return (
     <Modal isCentered onClose={onClose} size={"lg"} isOpen={isOpen}>
       <ModalOverlay />
@@ -37,7 +43,19 @@ export const DeleteModal = ({
               {deleteMessageDialog(mode, "Build setting UI")}
             </Typography>
             <HStack spacing={3} w={"full"}>
-              <Button variant="danger" isFullWidth size="small">
+              <Button
+                isLoading={isLoading}
+                variant="danger"
+                isFullWidth
+                size="small"
+                onClick={async () => {
+                  setIsLoading(true);
+                  if (mode === "board") await deleteBoard({ id });
+                  else if (mode === "task") await deleteTask({ taskId: id });
+                  setIsLoading(false);
+                  //TODO: return to boards page
+                }}
+              >
                 Delete
               </Button>
               <Button
