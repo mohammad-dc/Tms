@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { useQuery } from "react-query";
 
 export const useInitDestroy = (
   initCb?: () => Promise<void>,
@@ -19,3 +20,6 @@ export const useInitDestroy = (
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, deps);
 };
+
+export const useSendQuery = (callback: () => any) =>
+  useQuery("/", async () => callback());

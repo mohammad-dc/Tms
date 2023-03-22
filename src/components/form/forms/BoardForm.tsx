@@ -1,6 +1,7 @@
-import { VStack } from "@chakra-ui/react";
-import { Form, Formik } from "formik";
+import { useToast, VStack } from "@chakra-ui/react";
+import { FieldArray, Form, Formik } from "formik";
 import { useState } from "react";
+import { createBoard } from "../../../core/services/boardServices";
 import { boardSchema } from "../../../validations/boardValidations";
 import { Icon } from "../../utils/Icon";
 import { Button } from "../buttons/Button";
@@ -9,30 +10,35 @@ import { SubTextBox } from "../inputs/SubTextBox";
 import { TextBox } from "../inputs/TextBox";
 
 export const BoardForm = () => {
-  const initialValues = {
+  const initialValues: { name: string; columns: any[] } = {
     name: "",
     columns: [],
   };
 
-  const [columns, setColumn] = useState<
-    {
-      id: number;
-      name: string;
-      value: string;
-    }[]
-  >([]);
+  const toast = useToast();
 
   return (
     <Formik
       initialValues={initialValues}
       validationSchema={boardSchema}
-      onSubmit={(values, actions) => {
+      onSubmit={async (values, actions) => {
         actions.setSubmitting(true);
-        console.log(values);
+        const columns = [];
+        for (let col of values.columns) {
+          if (col.isNew) columns.push(col.value);
+        }
+        const payload = { name: values.name, columns };
+        //* send request to create new board to server
+        const res = await createBoard(payload);
         actions.setSubmitting(false);
+        toast({
+          title: res.message,
+          status: "success",
+          isClosable: true,
+        });
       }}
     >
-      {({ isSubmitting, errors, touched }) => (
+      {({ isSubmitting, errors, touched, values }) => (
         <Form style={{ padding: "20px 0" }}>
           <TextBox
             label="Name"
@@ -42,37 +48,42 @@ export const BoardForm = () => {
             error={errors.name}
             placeholder={"e.g Web Design"}
           />
-          {columns.length !== 0 && (
-            <VStack align={"flex-start"} spacing={0} mt={5}>
-              <LabelInput label={"Board Columns"} />
-              <VStack w={"full"} spacing={3}>
-                {columns.map((el) => (
-                  <SubTextBox
-                    key={Math.random()}
-                    name="subtask"
-                    isInvalid={false}
-                  />
-                ))}
-              </VStack>
-            </VStack>
-          )}
-          <VStack spacing={5} mt={5}>
-            <Button
-              isFullWidth
-              size="small"
-              variant="secondary"
-              onClick={() => {
-                const newColumn = {
-                  id: columns.length + 1,
-                  name: `column_${columns.length + 1}`,
-                  value: "",
-                };
-                setColumn([...columns, newColumn]);
+          <VStack align={"flex-start"} spacing={0} mt={5}>
+            <LabelInput label={"Board Columns"} />
+
+            <FieldArray
+              name="columns"
+              render={(arrayHelpers) => {
+                return (
+                  <VStack w={"full"} spacing={3}>
+                    {values.columns.map((el, i) => (
+                      <SubTextBox
+                        key={i}
+                        name={`columns.${i}.value`}
+                        isInvalid={false}
+                        onClick={() => arrayHelpers.remove(i)}
+                      />
+                    ))}
+                    <Button
+                      isFullWidth
+                      size="small"
+                      variant="secondary"
+                      onClick={() => {
+                        arrayHelpers.insert(values.columns.length + 1, {
+                          isNew: true,
+                          value: "",
+                        });
+                      }}
+                    >
+                      <Icon color={"primary.200"} icon="plusIcon" />
+                      <span>Add New Column</span>
+                    </Button>
+                  </VStack>
+                );
               }}
-            >
-              <Icon color={"primary.200"} icon="plusIcon" />
-              <span>Add New Column</span>
-            </Button>
+            />
+          </VStack>
+          <VStack spacing={5} mt={5}>
             <Button
               type={"submit"}
               isLoading={isSubmitting}

@@ -1,7 +1,9 @@
 import { Box, Center, HStack, useDisclosure } from "@chakra-ui/react";
+import { useBoard } from "../../../context/boardsContext";
 import { Button } from "../../form/buttons/Button";
 import { Icon } from "../Icon";
 import { Logo } from "../Logo/Logo";
+import { Menu } from "../Menu";
 import { BoardModal } from "../Modals/BoardModal";
 import { DeleteModal } from "../Modals/DeleteModal";
 import { TaskModal } from "../Modals/TaskModal";
@@ -11,6 +13,7 @@ import { Typography } from "../Typography";
 export const Navbar = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
+  const { activeBoard } = useBoard();
   return (
     <Box
       p={{ md: 0, sm: 5 }}
@@ -45,13 +48,14 @@ export const Navbar = () => {
                 Add New Task
               </Center>
             </Button>
-            <Icon icon="dotsIcon" color="grey.300" pointer />
+            {activeBoard && <Menu id={activeBoard} />}
+            {/* <Icon icon="dotsIcon" color="grey.300" pointer /> */}
           </HStack>
         </HStack>
       </HStack>
 
       {/* Modal */}
-      <ViewTaskModal isOpen={isOpen} onClose={onClose} />
+      <TaskModal mode={"add"} isOpen={isOpen} onClose={onClose} />
     </Box>
   );
 };

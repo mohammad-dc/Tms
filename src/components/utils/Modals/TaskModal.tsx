@@ -10,12 +10,14 @@ import { TaskForm } from "../../form/forms/TaskForm";
 
 interface ITaskModalProps {
   mode?: "add" | "edit";
+  id?: number;
   isOpen: boolean;
   onClose: () => void;
 }
 
 export const TaskModal = ({
   mode = "add",
+  id,
   isOpen,
   onClose,
 }: ITaskModalProps) => {
