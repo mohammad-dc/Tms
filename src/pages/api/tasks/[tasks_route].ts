@@ -1,4 +1,5 @@
 import {
+  changeBoardColumn,
   createTask,
   deleteTask,
   editTask,
@@ -15,6 +16,9 @@ const endpoints: endPointsType = {
   },
   deleteTask: {
     middleWares: [deleteTask],
+  },
+  changeBoardColumn: {
+    middleWares: [changeBoardColumn],
   },
 };
 

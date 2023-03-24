@@ -27,9 +27,12 @@ export const TaskForm = ({ board, mode = "add", task }: ITaskFormProps) => {
     subTasks: any[];
     status: string;
   } = {
-    title: "",
-    description: "",
-    subTasks: [],
+    title: task?.title || "",
+    description: task?.description || "",
+    subTasks:
+      Array.from(task?.subTasks || [], (el) => {
+        return { isNew: false, value: el.title, id: el.id };
+      }) || [],
     status: board?.boardColumns[0].id.toString() || "0",
   };
 
@@ -44,22 +47,19 @@ export const TaskForm = ({ board, mode = "add", task }: ITaskFormProps) => {
         for (let sub of values.subTasks) {
           if (sub.isNew) subTasks.push(sub.value);
         }
-        const payload: any = {
+        const payload = {
           boardColumnId: parseInt(values.status),
           title: values.title,
           description: values.description,
           subTasks: subTasks,
         };
 
-        console.log({ payload });
         if (mode === "add") {
           const res = await createTask(payload);
           insertTask(res.response.task);
+        } else {
+          task?.id && (await editTask({ ...payload, taskId: task?.id }));
         }
-        // else {
-        //   payload.taskId = task?.id;
-        //   await editTask(payload);
-        // }
         actions.setSubmitting(false);
       }}
     >

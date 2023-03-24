@@ -29,8 +29,23 @@ export class Subtasks extends BaseModel {
     }
   }
 
-  deleteSubtask(id: number) {
+  async deleteSubtask(id: number) {
     try {
+      return await this.getModel().delete({ where: { id } });
+    } catch (error: any) {
+      throw new Error(error);
+    }
+  }
+
+  async completeSubtask(subtaskId: number, complete: boolean) {
+    try {
+      await this.getModel().update({
+        where: { id: subtaskId },
+        data: {
+          isCompleted: complete,
+        },
+      });
+      return true;
     } catch (error: any) {
       throw new Error(error);
     }
