@@ -7,10 +7,17 @@ interface IIconButtonProps {
   label: string;
   icon: IconTypes;
   onClick: (e?: any) => void;
+  isLoading?: boolean;
 }
-export const IconButton = ({ icon, label, onClick }: IIconButtonProps) => {
+export const IconButton = ({
+  icon,
+  label,
+  onClick,
+  isLoading = false,
+}: IIconButtonProps) => {
   return (
     <ChakraIconButton
+      isLoading={isLoading}
       onClick={onClick}
       bg={"transparent"}
       _hover={{ bg: "transparent" }}

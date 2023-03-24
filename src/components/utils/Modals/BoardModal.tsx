@@ -7,18 +7,19 @@ import {
   ModalOverlay,
 } from "@chakra-ui/react";
 import React from "react";
+import { BoardProps } from "../../../types/pageProps";
 import { BoardForm } from "../../form/forms/BoardForm";
 
 interface IBoardModalProps {
   mode?: "add" | "edit";
-  id?: number;
   isOpen: boolean;
   onClose: () => void;
+  board?: BoardProps;
 }
 
 export const BoardModal = ({
   mode = "add",
-  id,
+  board,
   isOpen,
   onClose,
 }: IBoardModalProps) => {
@@ -30,7 +31,7 @@ export const BoardModal = ({
           {mode === "add" ? "Add New Board" : "edit Board"}
         </ModalHeader>
         <ModalBody>
-          <BoardForm />
+          <BoardForm board={board} mode={mode} />
         </ModalBody>
       </ModalContent>
     </Modal>

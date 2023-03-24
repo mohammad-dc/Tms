@@ -9,9 +9,9 @@ export class Subtasks extends BaseModel {
     return this._client.subTasks;
   }
 
-  async createManySubtasks(subtasks: { title: string; taskId: number }[]) {
+  async createManySubtasks(subTasks: { title: string; taskId: number }[]) {
     try {
-      await this.getModel().createMany({ data: subtasks });
+      await this.getModel().createMany({ data: subTasks });
       return true;
     } catch (error: any) {
       throw new Error(error);

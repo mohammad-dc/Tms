@@ -19,7 +19,7 @@ export const Sidebar = ({ children }: ISidebarProps) => {
     >
       <Flex
         pt={{ md: 7, sm: 3 }}
-        w={{ lg: "20.4%", md: "260px" }}
+        w={{ lg: "300px", md: "260px" }}
         flexDir="column"
         alignItems="center"
         overflowY={"auto"}

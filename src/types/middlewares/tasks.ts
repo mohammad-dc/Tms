@@ -1,32 +1,17 @@
-//* global types
-type SubtaskType = {
-  id: number;
-  title: string;
-  isCompleted: boolean;
-};
-
-type TaskType = {
-  id: number;
-  title: string;
-  description: string;
-  boardCols: number;
-  stCount: number;
-  cCount: number;
-  subtasks: SubtaskType;
-};
+import { TaskProps } from "../pageProps";
 
 //* create task
 export type CreateTaskRequestBodyType = {
   boardColumnId: number;
   title: string;
   description: string;
-  subtasks: string[];
+  subTasks: string[];
 };
 
 export type CreateTaskResponseBodyType = {
   success: boolean;
   message: string;
-  task: TaskType;
+  task: TaskProps;
 };
 
 //* edit task
@@ -34,13 +19,13 @@ export type editTaskRequestBodyType = {
   taskId: number;
   title: string;
   description: string;
-  subtasks: string[];
+  subTasks: string[];
 };
 
 export type editTaskResponseBodyType = {
   success: boolean;
   message: string;
-  response: TaskType;
+  response: TaskProps;
 };
 
 //* delete task

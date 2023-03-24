@@ -1,6 +1,10 @@
 import { Spacer, VStack } from "@chakra-ui/react";
-import { Form, Formik } from "formik";
+import { FieldArray, Form, Formik } from "formik";
 import { useState } from "react";
+import { useBoard } from "../../../context/boardsContext";
+import { createTask, editTask } from "../../../core/services/tasksServices";
+import { BoardType } from "../../../types/middlewares/boards";
+import { BoardProps, TaskProps } from "../../../types/pageProps";
 import { taskSchema } from "../../../validations/taskValidations";
 import { Icon } from "../../utils/Icon";
 import { Button } from "../buttons/Button";
@@ -9,32 +13,57 @@ import { SelectBox } from "../inputs/SelectBox";
 import { SubTextBox } from "../inputs/SubTextBox";
 import { TextareaBox } from "../inputs/TextareaBox";
 import { TextBox } from "../inputs/TextBox";
-export const TaskForm = () => {
-  const initialValues = {
+
+interface ITaskFormProps {
+  board?: BoardProps;
+  mode?: "add" | "edit";
+  task?: TaskProps;
+}
+
+export const TaskForm = ({ board, mode = "add", task }: ITaskFormProps) => {
+  const initialValues: {
+    title: string;
+    description: string;
+    subTasks: any[];
+    status: string;
+  } = {
     title: "",
     description: "",
-    subtasks: [],
-    status: "",
+    subTasks: [],
+    status: board?.boardColumns[0].id.toString() || "0",
   };
 
-  const [subtasks, setSubtask] = useState<
-    {
-      id: number;
-      name: string;
-      value: string;
-    }[]
-  >([]);
+  const { insertTask } = useBoard();
   return (
     <Formik
       initialValues={initialValues}
-      validationSchema={taskSchema}
-      onSubmit={(values, actions) => {
+      // validationSchema={taskSchema}
+      onSubmit={async (values, actions) => {
         actions.setSubmitting(true);
-        console.log(values);
+        const subTasks = [];
+        for (let sub of values.subTasks) {
+          if (sub.isNew) subTasks.push(sub.value);
+        }
+        const payload: any = {
+          boardColumnId: parseInt(values.status),
+          title: values.title,
+          description: values.description,
+          subTasks: subTasks,
+        };
+
+        console.log({ payload });
+        if (mode === "add") {
+          const res = await createTask(payload);
+          insertTask(res.response.task);
+        }
+        // else {
+        //   payload.taskId = task?.id;
+        //   await editTask(payload);
+        // }
         actions.setSubmitting(false);
       }}
     >
-      {({ isSubmitting, errors, touched, setFieldValue }) => (
+      {({ isSubmitting, errors, touched, setFieldValue, values }) => (
         <Form style={{ padding: "20px 0" }}>
           <VStack spacing={3} w={"full"}>
             <TextBox
@@ -46,44 +75,50 @@ export const TaskForm = () => {
               placeholder={"e.g. Take coffee break"}
             />
             <TextareaBox name={"description"} label={"Description"} />
-            {subtasks.length !== 0 && (
-              <VStack w={"full"} align={"flex-start"} spacing={0} mt={5}>
-                <LabelInput label={"Subtasks"} />
-                <VStack w={"full"} spacing={3}>
-                  {subtasks.map((el) => (
-                    <SubTextBox
-                      key={Math.random()}
-                      name="subtask"
-                      isInvalid={false}
-                    />
-                  ))}
-                </VStack>
-              </VStack>
-            )}
-            <Button
-              isFullWidth
-              size="small"
-              variant="secondary"
-              onClick={() => {
-                const newColumn = {
-                  id: subtasks.length + 1,
-                  name: `column_${subtasks.length + 1}`,
-                  value: "",
-                };
-                setSubtask([...subtasks, newColumn]);
-              }}
-            >
-              <Icon color={"primary.200"} icon="plusIcon" />
-              <span>Add New Subtask</span>
-            </Button>
+            <VStack w={"full"} align={"flex-start"} spacing={0} mt={5}>
+              <LabelInput label={"Subtasks"} />
+              <FieldArray
+                name={"subTasks"}
+                render={(arrayHelpers) => {
+                  return (
+                    <VStack w={"full"} spacing={3}>
+                      {values.subTasks.map((el, i) => (
+                        <SubTextBox
+                          key={i}
+                          name={`subTasks.${i}.value`}
+                          isInvalid={false}
+                          onClick={() => arrayHelpers.remove(i)}
+                        />
+                      ))}
+                      <Button
+                        isFullWidth
+                        size="small"
+                        variant="secondary"
+                        onClick={() => {
+                          arrayHelpers.insert(values.subTasks.length + 1, {
+                            isNew: true,
+                            value: "",
+                          });
+                        }}
+                      >
+                        <Icon color={"primary.200"} icon="plusIcon" />
+                        <span>Add New Subtask</span>
+                      </Button>
+                    </VStack>
+                  );
+                }}
+              />
+            </VStack>
             <Spacer h={10} />
-            <SelectBox
-              placeholder={"Status"}
-              options={[{ _id: "1", value: "23" }]}
-              onSelect={(value) => setFieldValue("status", value)}
-              name="status"
-              label="Status"
-            />
+            {board && (
+              <SelectBox
+                placeholder={"Status"}
+                options={board?.boardColumns}
+                onSelect={(value) => setFieldValue("status", value)}
+                name="status"
+                label="Status"
+              />
+            )}
             <Button
               type={"submit"}
               isLoading={isSubmitting}

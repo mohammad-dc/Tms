@@ -3,10 +3,11 @@ import React, { useState } from "react";
 
 interface ISubtaskBox {
   value: string;
-  decoration?: "none" | "line-through";
+  isCompleted: boolean;
+  id: number;
 }
-export const SubtaskBox = ({ value, decoration = "none" }: ISubtaskBox) => {
-  const [checked, setChecked] = useState<boolean>(false);
+export const SubtaskBox = ({ value, isCompleted, id }: ISubtaskBox) => {
+  const [checked, setChecked] = useState<boolean>(isCompleted);
   return (
     <Box bg={"grey.100"} p={3} borderRadius={"4px"} w={"full"}>
       <Checkbox

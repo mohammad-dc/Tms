@@ -1,6 +1,5 @@
 import { Box, HStack } from "@chakra-ui/react";
 import { GetServerSideProps } from "next";
-import { useRouter } from "next/dist/client/router";
 import React, { useEffect } from "react";
 import { AddColumn } from "../../components/utils/Column/AddColumn";
 import { Column } from "../../components/utils/Column/Column";
@@ -10,13 +9,10 @@ import type { NextPage } from "next";
 import { BoardPageProps } from "../../types/pageProps";
 
 const BoardPage: NextPage<BoardPageProps> = (props) => {
-  const router = useRouter();
-  const { boardId } = router.query;
   const { saveActiveBoard } = useBoard();
 
   console.log({ props });
-
-  useEffect(() => saveActiveBoard(parseInt(boardId as string)));
+  useEffect(() => saveActiveBoard(props.result));
 
   return (
     <Box p={5} overflowX={"auto"} h={"100%"}>

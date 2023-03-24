@@ -1,9 +1,9 @@
 import {
   DeleteSubtaskRequestBodyType,
   DeleteSubtaskResponseBodyType,
-} from "../../types/middlewares/subtasks";
+} from "../../types/middlewares/subTasks";
 import { middlewareType } from "../../types/shared";
-import { Subtasks } from "../models/subtasksModel";
+import { Subtasks } from "../models/subTasksModel";
 import responses from "../services/apiResponse";
 
 export const deleteSubtask: middlewareType<

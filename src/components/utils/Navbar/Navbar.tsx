@@ -4,10 +4,7 @@ import { Button } from "../../form/buttons/Button";
 import { Icon } from "../Icon";
 import { Logo } from "../Logo/Logo";
 import { Menu } from "../Menu";
-import { BoardModal } from "../Modals/BoardModal";
-import { DeleteModal } from "../Modals/DeleteModal";
 import { TaskModal } from "../Modals/TaskModal";
-import { ViewTaskModal } from "../Modals/ViewTaskModal";
 import { Typography } from "../Typography";
 
 export const Navbar = () => {
@@ -48,7 +45,7 @@ export const Navbar = () => {
                 Add New Task
               </Center>
             </Button>
-            {activeBoard && <Menu id={activeBoard} />}
+            {activeBoard && <Menu id={activeBoard.id} board={activeBoard} />}
             {/* <Icon icon="dotsIcon" color="grey.300" pointer /> */}
           </HStack>
         </HStack>

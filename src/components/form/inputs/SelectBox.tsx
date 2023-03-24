@@ -1,14 +1,16 @@
 import { FormControl, Select } from "@chakra-ui/react";
 import { Field } from "formik";
+import { BoardColumnProps } from "../../../types/pageProps";
 import { LabelInput } from "./LabelInput";
 
 interface ISelectBoxProps {
   placeholder: string;
-  options: { _id: string; value: string }[];
+  options: BoardColumnProps[];
   onSelect: (value: string) => void;
   name: string;
   label?: string;
   withFormik?: boolean;
+  selected?: number;
 }
 export const SelectBox = ({
   placeholder,
@@ -17,6 +19,7 @@ export const SelectBox = ({
   name,
   label,
   withFormik = true,
+  selected,
 }: ISelectBoxProps) => {
   return (
     <FormControl>
@@ -25,26 +28,19 @@ export const SelectBox = ({
         <Field
           as={Select}
           name={name}
-          placeholder={placeholder}
-          _placeholder={{ color: "grey.300", fontSize: "13px" }}
           onChange={(e: any) => onSelect(e.target.value)}
         >
           {options.map((el) => (
-            <option value={el._id} key={el._id}>
-              {el.value}
+            <option value={el.id} key={el.id}>
+              {el.name}
             </option>
           ))}
         </Field>
       ) : (
-        <Select
-          name={name}
-          placeholder={placeholder}
-          _placeholder={{ color: "grey.300", fontSize: "13px" }}
-          onChange={(e: any) => onSelect(e.target.value)}
-        >
+        <Select name={name} onChange={(e: any) => onSelect(e.target.value)}>
           {options.map((el) => (
-            <option value={el._id} key={el._id}>
-              {el.value}
+            <option selected={el.id === selected} value={el.id} key={el.id}>
+              {el.name}
             </option>
           ))}
         </Select>

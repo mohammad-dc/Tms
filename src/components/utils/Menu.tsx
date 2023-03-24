@@ -11,13 +11,15 @@ import { Icon } from "./Icon";
 import { BoardModal } from "./Modals/BoardModal";
 import { TaskModal } from "./Modals/TaskModal";
 import { DeleteModal } from "./Modals/DeleteModal";
+import { BoardProps } from "../../types/pageProps";
 
 interface IMenuProps {
   mode?: "board" | "task";
   id: number;
+  board?: BoardProps;
 }
 
-export const Menu = ({ mode = "board", id }: IMenuProps) => {
+export const Menu = ({ mode = "board", id, board }: IMenuProps) => {
   const options = [`Edit ${mode}`, `Delete ${mode}`];
   const boardModal = useDisclosure();
   const taskModal = useDisclosure();
@@ -51,6 +53,7 @@ export const Menu = ({ mode = "board", id }: IMenuProps) => {
 
       {/* Modal */}
       <BoardModal
+        board={board}
         mode={"edit"}
         isOpen={boardModal.isOpen}
         onClose={boardModal.onClose}

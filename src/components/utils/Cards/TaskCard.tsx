@@ -1,8 +1,15 @@
-import { Box, VStack } from "@chakra-ui/react";
+import { Box, useDisclosure, VStack } from "@chakra-ui/react";
 import React from "react";
+import { TaskProps } from "../../../types/pageProps";
+import { ViewTaskModal } from "../Modals/ViewTaskModal";
 import { Typography } from "../Typography";
 
-export const TaskCard = () => {
+interface ITaskCardProps {
+  task: TaskProps;
+}
+
+export const TaskCard = ({ task }: ITaskCardProps) => {
+  const { isOpen, onOpen, onClose } = useDisclosure();
   return (
     <Box
       borderRadius={"8px"}
@@ -13,15 +20,16 @@ export const TaskCard = () => {
       boxShadow={"md"}
       minW={"280px"}
       cursor={"pointer"}
+      onClick={onOpen}
     >
       <VStack spacing={2} align={"flex-start"}>
-        <Typography variant="heading-m">
-          Build UI for onboarding flow
-        </Typography>
+        <Typography variant="heading-m">{task.title}</Typography>
         <Typography variant="txt-normal" color="grey.300">
-          0 of 3 substasks
+          {`${task.cCount} of ${task.stCount} subTasks`}
         </Typography>
       </VStack>
+      {/* Modal */}
+      <ViewTaskModal isOpen={isOpen} onClose={onClose} task={task} />
     </Box>
   );
 };
