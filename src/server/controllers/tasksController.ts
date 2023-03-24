@@ -1,4 +1,6 @@
 import {
+  ChangeBoardColTaskRequestBodyType,
+  ChangeBoardColTaskResponseBodyType,
   CreateTaskRequestBodyType,
   CreateTaskResponseBodyType,
   deleteTaskRequestBodyType,
@@ -7,7 +9,7 @@ import {
   editTaskResponseBodyType,
 } from "../../types/middlewares/tasks";
 import { middlewareType } from "../../types/shared";
-import { Subtasks } from "../models/subTasksModel";
+import { Subtasks } from "../models/subtasksModel";
 import { Tasks } from "../models/tasksModel";
 import responses from "../services/apiResponse";
 
@@ -79,6 +81,22 @@ export const deleteTask: middlewareType<
     const _taskModel = new Tasks();
     await _taskModel.deleteTask(taskId);
     responses.deleteSuccess(res);
+  } catch (error: any) {
+    throw new Error(error);
+  }
+};
+
+export const changeBoardColumn: middlewareType<
+  ChangeBoardColTaskRequestBodyType,
+  ChangeBoardColTaskResponseBodyType
+> = async (req, res) => {
+  try {
+    const { boardColumnId, taskId } = req.body;
+
+    const _taskModel = new Tasks();
+
+    await _taskModel.changeBoardColumn(boardColumnId, taskId);
+    responses.updatedSuccess(res, {});
   } catch (error: any) {
     throw new Error(error);
   }

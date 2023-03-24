@@ -28,6 +28,18 @@ export type editTaskResponseBodyType = {
   response: TaskProps;
 };
 
+//* change board column task
+export type ChangeBoardColTaskRequestBodyType = {
+  boardColumnId: number;
+  taskId: number;
+};
+
+export type ChangeBoardColTaskResponseBodyType = {
+  success: boolean;
+  message: string;
+  response: {};
+};
+
 //* delete task
 export type deleteTaskRequestBodyType = {
   taskId: number;

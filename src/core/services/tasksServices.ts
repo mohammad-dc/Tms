@@ -1,4 +1,6 @@
 import {
+  ChangeBoardColTaskRequestBodyType,
+  ChangeBoardColTaskResponseBodyType,
   CreateTaskRequestBodyType,
   CreateTaskResponseBodyType,
   deleteTaskRequestBodyType,
@@ -24,5 +26,16 @@ export const editTask = (payload: editTaskRequestBodyType) => {
 export const deleteTask = (payload: deleteTaskRequestBodyType) => {
   return axiosClient
     .post<ApiRes<deleteTaskResponseBodyType>>(`tasks/deleteTask`, payload)
+    .then((response) => response.data);
+};
+
+export const changeBoardColumn = (
+  payload: ChangeBoardColTaskRequestBodyType
+) => {
+  return axiosClient
+    .post<ApiRes<ChangeBoardColTaskResponseBodyType>>(
+      `tasks/changeBoardColumn`,
+      payload
+    )
     .then((response) => response.data);
 };
