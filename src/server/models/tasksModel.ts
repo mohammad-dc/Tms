@@ -9,13 +9,19 @@ export class Tasks extends BaseModel {
     return this._client.tasks;
   }
 
-  async createTask(description: string, title: string, boardCols: number) {
+  async createTask(
+    description: string,
+    title: string,
+    boardCols: number,
+    stCount: number
+  ) {
     try {
       return await this.getModel().create({
         data: {
           description,
           title,
           boardCols,
+          stCount,
         },
       });
     } catch (error: any) {

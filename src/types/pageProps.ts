@@ -13,7 +13,7 @@ export type TaskProps = {
   cCount: number;
   stCount: number;
   boardCols: number;
-  subtasks: SubtasksProps[];
+  subTasks: SubtasksProps[];
 };
 
 export type BoardColumnProps = {

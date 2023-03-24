@@ -6,21 +6,22 @@ import {
   ModalOverlay,
 } from "@chakra-ui/react";
 import React from "react";
+import { useBoard } from "../../../context/boardsContext";
 import { TaskForm } from "../../form/forms/TaskForm";
 
 interface ITaskModalProps {
   mode?: "add" | "edit";
-  id?: number;
   isOpen: boolean;
   onClose: () => void;
 }
 
 export const TaskModal = ({
   mode = "add",
-  id,
   isOpen,
   onClose,
 }: ITaskModalProps) => {
+  const { activeBoard } = useBoard();
+
   return (
     <Modal isCentered onClose={onClose} size={"xl"} isOpen={isOpen}>
       <ModalOverlay />
@@ -29,7 +30,7 @@ export const TaskModal = ({
           {mode === "add" ? "Add New Task" : "edit Task"}
         </ModalHeader>
         <ModalBody>
-          <TaskForm />
+          <TaskForm board={activeBoard} />
         </ModalBody>
       </ModalContent>
     </Modal>

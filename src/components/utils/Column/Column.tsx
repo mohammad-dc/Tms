@@ -16,10 +16,9 @@ export const Column = ({ boardColumn }: IColumnProps) => {
         </Typography>
       </HStack>
       <VStack spacing={5} mt={5}>
-        <TaskCard />
-        <TaskCard />
-        <TaskCard />
-        <TaskCard />
+        {boardColumn.tasks.map((el) => (
+          <TaskCard key={el.id} task={el} />
+        ))}
       </VStack>
     </Box>
   );

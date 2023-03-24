@@ -7,7 +7,7 @@ import {
   editTaskResponseBodyType,
 } from "../../types/middlewares/tasks";
 import { middlewareType } from "../../types/shared";
-import { Subtasks } from "../models/subtasksModel";
+import { Subtasks } from "../models/subTasksModel";
 import { Tasks } from "../models/tasksModel";
 import responses from "../services/apiResponse";
 
@@ -16,23 +16,28 @@ export const createTask: middlewareType<
   CreateTaskResponseBodyType
 > = async (req, res) => {
   try {
-    const { boardColumnId, description, subtasks, title } = req.body;
+    const { boardColumnId, description, subTasks, title } = req.body;
 
     const _taskModel = new Tasks();
     const _subtaskModel = new Subtasks();
 
-    const task = await _taskModel.createTask(description, title, boardColumnId);
-
-    if (subtasks.length > 0) {
+    const task = await _taskModel.createTask(
+      description,
+      title,
+      boardColumnId,
+      subTasks.length
+    );
+    if (subTasks.length > 0) {
       const _cols = [];
-      for (let col of subtasks) {
+      for (let col of subTasks) {
         _cols.push({ title: col, taskId: task.id });
       }
+
       await _subtaskModel.createManySubtasks(_cols);
     }
 
-    const _subtasks = await _subtaskModel.getSubtasksByTaskId(task.id);
-    responses.createdSuccess(res, { ...task, subtasks: _subtasks });
+    const _subTasks = await _subtaskModel.getSubtasksByTaskId(task.id);
+    responses.createdSuccess(res, { ...task, subTasks: _subTasks });
   } catch (error: any) {
     throw new Error(error);
   }
@@ -43,16 +48,16 @@ export const editTask: middlewareType<
   editTaskResponseBodyType
 > = async (req, res) => {
   try {
-    const { description, subtasks, taskId, title } = req.body;
+    const { description, subTasks, taskId, title } = req.body;
 
     const _taskModel = new Tasks();
     const _subtaskModel = new Subtasks();
 
     await _taskModel.editTask(taskId, description, title);
 
-    if (subtasks.length > 0) {
+    if (subTasks.length > 0) {
       const _cols = [];
-      for (let col of subtasks) {
+      for (let col of subTasks) {
         _cols.push({ title: col, taskId });
       }
       await _subtaskModel.createManySubtasks(_cols);

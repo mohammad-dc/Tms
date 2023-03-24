@@ -1,7 +1,9 @@
 import { useToast, VStack } from "@chakra-ui/react";
 import { FieldArray, Form, Formik } from "formik";
 import { useState } from "react";
-import { createBoard } from "../../../core/services/boardServices";
+import { deleteBoardColumn } from "../../../core/services/boardColumnsServices";
+import { createBoard, editBoard } from "../../../core/services/boardServices";
+import { BoardProps } from "../../../types/pageProps";
 import { boardSchema } from "../../../validations/boardValidations";
 import { Icon } from "../../utils/Icon";
 import { Button } from "../buttons/Button";
@@ -9,10 +11,18 @@ import { LabelInput } from "../inputs/LabelInput";
 import { SubTextBox } from "../inputs/SubTextBox";
 import { TextBox } from "../inputs/TextBox";
 
-export const BoardForm = () => {
+interface IBoardFormProps {
+  board?: BoardProps;
+  mode?: "add" | "edit";
+}
+export const BoardForm = ({ board, mode = "add" }: IBoardFormProps) => {
+  const [deleting, setDeleting] = useState<boolean>(false);
   const initialValues: { name: string; columns: any[] } = {
-    name: "",
-    columns: [],
+    name: board?.name || "",
+    columns:
+      Array.from(board?.boardColumns || [], (el) => {
+        return { isNew: false, value: el.name, id: el.id };
+      }) || [],
   };
 
   const toast = useToast();
@@ -29,10 +39,13 @@ export const BoardForm = () => {
         }
         const payload = { name: values.name, columns };
         //* send request to create new board to server
-        const res = await createBoard(payload);
+        const res =
+          mode === "add"
+            ? await createBoard(payload)
+            : board && (await editBoard({ ...payload, boardId: board?.id }));
         actions.setSubmitting(false);
         toast({
-          title: res.message,
+          title: res?.message,
           status: "success",
           isClosable: true,
         });
@@ -61,7 +74,16 @@ export const BoardForm = () => {
                         key={i}
                         name={`columns.${i}.value`}
                         isInvalid={false}
-                        onClick={() => arrayHelpers.remove(i)}
+                        onClick={async () => {
+                          if (!el.isNew) {
+                            setDeleting(true);
+                            await deleteBoardColumn({
+                              boardColumnId: el.id,
+                            });
+                            setDeleting(false);
+                          }
+                          arrayHelpers.remove(i);
+                        }}
                       />
                     ))}
                     <Button
@@ -72,6 +94,7 @@ export const BoardForm = () => {
                         arrayHelpers.insert(values.columns.length + 1, {
                           isNew: true,
                           value: "",
+                          id: Math.random(),
                         });
                       }}
                     >
@@ -91,7 +114,7 @@ export const BoardForm = () => {
               size="small"
               variant="primary"
             >
-              Create New Board
+              {mode === "add" ? "Create New Board" : "Save Changes"}
             </Button>
           </VStack>
         </Form>

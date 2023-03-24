@@ -13,7 +13,6 @@ export const Layout = ({ children }: ILayoutProps) => {
   const { insertMany } = useBoard();
   useInitDestroy(async function onInit() {
     let result = await getAllBoards();
-    console.log({ result });
     insertMany(result.response);
   });
 
