@@ -6,12 +6,17 @@ import { Layout } from "../components/layout/Layout";
 import { BoardsProvider } from "../context/boardsContext";
 
 function MyApp({ Component, pageProps }: AppProps) {
+  const isDoc: any = { ...Component };
   return (
     <ChakraProvider theme={theme}>
       <BoardsProvider>
-        <Layout>
+        {isDoc.isDoc ? (
           <Component {...pageProps} />
-        </Layout>
+        ) : (
+          <Layout>
+            <Component {...pageProps} />
+          </Layout>
+        )}
       </BoardsProvider>
     </ChakraProvider>
   );

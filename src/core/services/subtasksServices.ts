@@ -10,7 +10,7 @@ import { axiosClient } from "./axiosService";
 export const deleteSubtask = (payload: DeleteSubtaskRequestBodyType) => {
   return axiosClient
     .post<ApiRes<DeleteSubtaskResponseBodyType>>(
-      `subTasks/deleteSubtask`,
+      `/subtasks/deleteSubtask`,
       payload
     )
     .then((response) => response.data);
@@ -19,7 +19,7 @@ export const deleteSubtask = (payload: DeleteSubtaskRequestBodyType) => {
 export const completeSubtask = (payload: CompleteSubtaskRequestBodyType) => {
   return axiosClient
     .post<ApiRes<CompleteSubtaskResponseBodyType>>(
-      `subTasks/completeSubtask`,
+      `/subtasks/completeSubtask`,
       payload
     )
     .then((response) => response.data);
