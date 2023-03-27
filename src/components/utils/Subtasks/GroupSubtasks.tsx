@@ -7,9 +7,11 @@ interface IGroupSubtasksProps {
   values: SubtasksProps[];
 }
 export const GroupSubtasks = ({ values }: IGroupSubtasksProps) => {
-  console.log({ values });
   return (
-    <CheckboxGroup colorScheme={"purple"}>
+    <CheckboxGroup
+      colorScheme={"purple"}
+      defaultValue={values.filter((el) => el.isCompleted).map((el) => el.title)}
+    >
       <Stack spacing={[1, 2]} direction={["column", "column"]} w={"full"}>
         {values.map((el) => (
           <SubtaskBox

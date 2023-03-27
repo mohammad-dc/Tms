@@ -10,7 +10,7 @@ export const deleteBoardColumn = (
 ) => {
   return axiosClient
     .post<ApiRes<DeleteBoardColumnResponseBodyType>>(
-      `boardColumns/deleteBoardColumn`,
+      `/boardColumns/deleteBoardColumn`,
       payload
     )
     .then((response) => response.data);

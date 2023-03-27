@@ -2,6 +2,7 @@ import { GetStaticProps, InferGetStaticPropsType } from "next";
 import { createSwaggerSpec } from "next-swagger-doc";
 import dynamic from "next/dynamic";
 import "swagger-ui-react/swagger-ui.css";
+import SwaggerUIReact from "swagger-ui-react";
 
 const SwaggerUI = dynamic<{
   spec: any;
@@ -16,10 +17,12 @@ export const getStaticProps: GetStaticProps = async () => {
     definition: {
       openapi: "3.0.0",
       info: {
-        title: "Next Swagger API Example",
+        title: "TMS Apis",
         version: "1.0",
       },
+      schema: ["https"],
     },
+    apiFolder: "src/pages/api",
   });
 
   return {
@@ -29,4 +32,5 @@ export const getStaticProps: GetStaticProps = async () => {
   };
 };
 
+ApiDoc.isDoc = true;
 export default ApiDoc;

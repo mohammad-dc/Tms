@@ -13,19 +13,19 @@ import { axiosClient } from "./axiosService";
 
 export const createTask = (payload: CreateTaskRequestBodyType) => {
   return axiosClient
-    .post<ApiRes<CreateTaskResponseBodyType>>(`tasks/createTask`, payload)
+    .post<ApiRes<CreateTaskResponseBodyType>>(`/tasks/createTask`, payload)
     .then((response) => response.data);
 };
 
 export const editTask = (payload: editTaskRequestBodyType) => {
   return axiosClient
-    .post<ApiRes<editTaskResponseBodyType>>(`tasks/editTask`, payload)
+    .post<ApiRes<editTaskResponseBodyType>>(`/tasks/editTask`, payload)
     .then((response) => response.data);
 };
 
 export const deleteTask = (payload: deleteTaskRequestBodyType) => {
   return axiosClient
-    .post<ApiRes<deleteTaskResponseBodyType>>(`tasks/deleteTask`, payload)
+    .post<ApiRes<deleteTaskResponseBodyType>>(`/tasks/deleteTask`, payload)
     .then((response) => response.data);
 };
 
@@ -34,7 +34,7 @@ export const changeBoardColumn = (
 ) => {
   return axiosClient
     .post<ApiRes<ChangeBoardColTaskResponseBodyType>>(
-      `tasks/changeBoardColumn`,
+      `/tasks/changeBoardColumn`,
       payload
     )
     .then((response) => response.data);

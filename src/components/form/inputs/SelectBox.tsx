@@ -49,6 +49,7 @@ export const SelectBox = ({
       ) : (
         <Select
           name={name}
+          defaultValue={selected}
           onChange={async (e: any) => {
             taskId &&
               (await changeBoardColumn({
@@ -59,7 +60,7 @@ export const SelectBox = ({
           }}
         >
           {options.map((el) => (
-            <option selected={el.id === selected} value={el.id} key={el.id}>
+            <option value={el.id} key={el.id}>
               {el.name}
             </option>
           ))}

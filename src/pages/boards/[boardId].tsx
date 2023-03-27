@@ -11,7 +11,6 @@ import { BoardPageProps } from "../../types/pageProps";
 const BoardPage: NextPage<BoardPageProps> = (props) => {
   const { saveActiveBoard } = useBoard();
 
-  console.log({ props });
   useEffect(() => saveActiveBoard(props.result));
 
   return (
