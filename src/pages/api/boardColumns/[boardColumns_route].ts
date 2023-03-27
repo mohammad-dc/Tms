@@ -10,6 +10,18 @@ const endpoints: endPointsType = {
    *     tags:
    *     - Board Columns
    *     description: Delete board Column
+   *     produces:
+   *       - application/json
+   *     consumes:
+   *       - application/json
+   *     requestBody:
+   *       content:
+   *         application/json:
+   *           schema:
+   *             type: object
+   *             properties:
+   *               boardColumnId:
+   *                 type: number
    *     responses:
    *       200:
    *         description: hello world

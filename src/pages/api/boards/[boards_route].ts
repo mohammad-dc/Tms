@@ -16,6 +16,23 @@ const endpoints: endPointsType = {
    *     tags:
    *     - Boards
    *     description: Create Board
+   *     produces:
+   *       - application/json
+   *     consumes:
+   *       - application/json
+   *     requestBody:
+   *       content:
+   *         application/json:
+   *           schema:
+   *             type: object
+   *             properties:
+   *               name:
+   *                 type: string
+   *               columns:
+   *                 type: array
+   *                 required: false
+   *                 items:
+   *                    type: string
    *     responses:
    *       200:
    *         description: hello world
@@ -30,6 +47,25 @@ const endpoints: endPointsType = {
    *     tags:
    *     - Boards
    *     description: Edit Board
+   *     produces:
+   *       - application/json
+   *     consumes:
+   *       - application/json
+   *     requestBody:
+   *       content:
+   *         application/json:
+   *           schema:
+   *             type: object
+   *             properties:
+   *               boardId:
+   *                 type: number
+   *               name:
+   *                 type: string
+   *               columns:
+   *                 type: array
+   *                 required: false
+   *                 items:
+   *                    type: string
    *     responses:
    *       200:
    *         description: hello world
@@ -44,6 +80,18 @@ const endpoints: endPointsType = {
    *     tags:
    *     - Boards
    *     description: Retrieve Board
+   *     produces:
+   *       - application/json
+   *     consumes:
+   *       - application/json
+   *     requestBody:
+   *       content:
+   *         application/json:
+   *           schema:
+   *             type: object
+   *             properties:
+   *               boardId:
+   *                 type: number
    *     responses:
    *       200:
    *         description: hello world
@@ -73,6 +121,18 @@ const endpoints: endPointsType = {
    *     tags:
    *     - Boards
    *     description: Delete Board
+   *     produces:
+   *       - application/json
+   *     consumes:
+   *       - application/json
+   *     requestBody:
+   *       content:
+   *         application/json:
+   *           schema:
+   *             type: object
+   *             properties:
+   *               id:
+   *                 type: number
    *     responses:
    *       200:
    *         description: hello world

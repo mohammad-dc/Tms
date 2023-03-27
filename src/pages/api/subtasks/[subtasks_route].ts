@@ -13,6 +13,18 @@ export const endpoints: endPointsType = {
    *     tags:
    *     - Subtasks
    *     description: Delete Subtask
+   *     produces:
+   *       - application/json
+   *     consumes:
+   *       - application/json
+   *     requestBody:
+   *       content:
+   *         application/json:
+   *           schema:
+   *             type: object
+   *             properties:
+   *               subtaskId:
+   *                 type: number
    *     responses:
    *       200:
    *         description: hello world
@@ -27,6 +39,20 @@ export const endpoints: endPointsType = {
    *     tags:
    *     - Subtasks
    *     description: Complete Subtask
+   *     produces:
+   *       - application/json
+   *     consumes:
+   *       - application/json
+   *     requestBody:
+   *       content:
+   *         application/json:
+   *           schema:
+   *             type: object
+   *             properties:
+   *               subtaskId:
+   *                 type: number
+   *               complete:
+   *                 type: boolean
    *     responses:
    *       200:
    *         description: hello world
