@@ -1,3 +1,4 @@
+import { JWTPayload } from "jose";
 import { NextApiRequest, NextApiResponse } from "next/types";
 
 export type ApiRes<T> = {
@@ -8,6 +9,7 @@ export type ApiRes<T> = {
 
 export interface ExtendedNextApiRequest<T = any> extends NextApiRequest {
   body: T;
+  user: UserSession;
 }
 export interface ExtendedNextApiResponse<T = any>
   extends NextApiResponse<ApiRes<T>> {}
@@ -23,3 +25,8 @@ export type endPointsType<T = any, K = any> = {
     middleWares: middlewareType<T, K>[];
   };
 };
+
+export interface UserSession extends JWTPayload {
+  userId: number;
+  email: string;
+}

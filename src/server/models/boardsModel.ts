@@ -10,10 +10,10 @@ export class Boards extends BaseModel {
     return this._client.boards;
   }
 
-  async createBoard(name: string) {
+  async createBoard(name: string, userId: number) {
     try {
       const board = await this.getModel().create({
-        data: { name },
+        data: { name, userId },
       });
       return board;
     } catch (error: any) {
@@ -48,7 +48,6 @@ export class Boards extends BaseModel {
             },
           },
         },
-        
       });
 
       return board;

@@ -44,7 +44,7 @@ export const TextBox = ({
           size={"lg"}
         />
         <InputRightElement w={"25%"}>
-          {error && <FormErrorMessage>{"Can't be empty"}</FormErrorMessage>}
+          {error && <FormErrorMessage>{error}</FormErrorMessage>}
         </InputRightElement>
       </InputGroup>
     </FormControl>

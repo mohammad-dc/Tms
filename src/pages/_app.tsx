@@ -4,13 +4,18 @@ import { ChakraProvider } from "@chakra-ui/react";
 import { theme } from "../theme";
 import { Layout } from "../components/layout/Layout";
 import { BoardsProvider } from "../context/boardsContext";
+import { useInitDestroy } from "../hooks";
+import { getCurrentUserInfo } from "../core/services/usersServices";
 
 function MyApp({ Component, pageProps }: AppProps) {
-  const isDoc: any = { ...Component };
+  useInitDestroy(async function onInit() {
+    await getCurrentUserInfo();
+  });
+  const comp: any = { ...Component };
   return (
     <ChakraProvider theme={theme}>
       <BoardsProvider>
-        {isDoc.isDoc ? (
+        {comp.isDoc || comp.isAuth ? (
           <Component {...pageProps} />
         ) : (
           <Layout>

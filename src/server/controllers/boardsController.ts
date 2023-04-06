@@ -9,9 +9,10 @@ import {
   RetrieveBoardRequestBodyType,
   RetrieveBoardResponseBodyType,
 } from "../../types/middlewares/boards";
-import { middlewareType } from "../../types/shared";
+import { UserSession, middlewareType } from "../../types/shared";
 import { BoardColumns } from "../models/boardColumnsModel";
 import { Boards } from "../models/boardsModel";
+import { getUserSessionInfoIfLoggedIn } from "../services/apiMiddlewares";
 import responses from "../services/apiResponse";
 
 export const createBoard: middlewareType<
@@ -21,11 +22,15 @@ export const createBoard: middlewareType<
   try {
     const { columns, name } = req.body;
 
+    const token = (await getUserSessionInfoIfLoggedIn(
+      req.cookies.token
+    )) as UserSession;
+
     //* db model instance
     const _boardModel = new Boards();
     const _boardColumnModel = new BoardColumns();
 
-    const board = await _boardModel.createBoard(name);
+    const board = await _boardModel.createBoard(name, token.userId);
 
     if (columns.length > 0) {
       const _cols = [];
