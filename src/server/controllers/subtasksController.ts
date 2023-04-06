@@ -23,7 +23,7 @@ export const deleteSubtask: middlewareType<
 
     await _taskModel.inCDecSubtaskCount("dec", subtask.taskId, 1);
 
-    responses.deleteSuccess(res);
+    return responses.deleteSuccess(res);
   } catch (error: any) {
     throw new Error(error);
   }
@@ -37,10 +37,13 @@ export const completeSubtask: middlewareType<
     const { complete, subtaskId } = req.body;
 
     const _subtaskModel = new Subtasks();
+    const _taskModel = new Tasks();
 
-    await _subtaskModel.completeSubtask(subtaskId, complete);
+    const subtask = await _subtaskModel.completeSubtask(subtaskId, complete);
 
-    responses.updatedSuccess(res, {});
+    const mode = complete ? "inc" : "dec";
+    await _taskModel.inCDecSubtaskCount(mode, subtask.taskId, 1);
+    return responses.updatedSuccess(res, {});
   } catch (error: any) {
     throw new Error(error);
   }

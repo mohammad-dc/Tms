@@ -39,7 +39,7 @@ export const createTask: middlewareType<
     }
 
     const _subTasks = await _subtaskModel.getSubtasksByTaskId(task.id);
-    responses.createdSuccess(res, { ...task, subTasks: _subTasks });
+    return responses.createdSuccess(res, { ...task, subTasks: _subTasks });
   } catch (error: any) {
     throw new Error(error);
   }
@@ -66,7 +66,7 @@ export const editTask: middlewareType<
     }
 
     const task = _taskModel.getOneTaskById(taskId);
-    responses.updatedSuccess(res, task);
+    return responses.updatedSuccess(res, task);
   } catch (error: any) {
     throw new Error(error);
   }
@@ -80,7 +80,7 @@ export const deleteTask: middlewareType<
     const { taskId } = req.body;
     const _taskModel = new Tasks();
     await _taskModel.deleteTask(taskId);
-    responses.deleteSuccess(res);
+    return responses.deleteSuccess(res);
   } catch (error: any) {
     throw new Error(error);
   }
@@ -96,7 +96,7 @@ export const changeBoardColumn: middlewareType<
     const _taskModel = new Tasks();
 
     await _taskModel.changeBoardColumn(boardColumnId, taskId);
-    responses.updatedSuccess(res, {});
+    return responses.updatedSuccess(res, {});
   } catch (error: any) {
     throw new Error(error);
   }

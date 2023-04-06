@@ -18,6 +18,15 @@ export class BoardColumns extends BaseModel {
     }
   }
 
+  async createBoardColumn(columns: { name: string; boardId: number }) {
+    try {
+      const boardColumn = await this.getModel().create({ data: columns });
+      return boardColumn;
+    } catch (error: any) {
+      throw new Error(error);
+    }
+  }
+
   async deleteBoardColumn(id: number) {
     try {
       await this.getModel().delete({ where: { id } });

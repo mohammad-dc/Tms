@@ -1,4 +1,6 @@
 import {
+  CreateBoardColumnRequestBodyType,
+  CreateBoardColumnResponseBodyType,
   DeleteBoardColumnRequestBodyType,
   DeleteBoardColumnResponseBodyType,
 } from "../../types/middlewares/boardColumns";
@@ -11,6 +13,17 @@ export const deleteBoardColumn = (
   return axiosClient
     .post<ApiRes<DeleteBoardColumnResponseBodyType>>(
       `/boardColumns/deleteBoardColumn`,
+      payload
+    )
+    .then((response) => response.data);
+};
+
+export const createBoardColumn = (
+  payload: CreateBoardColumnRequestBodyType
+) => {
+  return axiosClient
+    .post<ApiRes<CreateBoardColumnResponseBodyType>>(
+      `/boardColumns/createBoardColumn`,
       payload
     )
     .then((response) => response.data);
