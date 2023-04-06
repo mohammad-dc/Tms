@@ -27,6 +27,22 @@ const responses = {
     });
     return responses.endSequence;
   },
+  emailOrPasswordWrong: (res: ExtendedNextApiResponse) => {
+    res.status(BAD_REQUEST).json({
+      success: false,
+      message: "email or password wrong",
+      response: {},
+    });
+    return responses.endSequence;
+  },
+  unauthorized: (res: ExtendedNextApiResponse) => {
+    res.status(UNAUTHORIZED).json({
+      success: false,
+      message: "not authorized",
+      response: {},
+    });
+    return responses.endSequence;
+  },
   //*500 family
   somethingWentWrong: (res: ExtendedNextApiResponse) => {
     res.status(INTERNAL_SERVER).json({
@@ -37,6 +53,14 @@ const responses = {
     return responses.endSequence;
   },
   //*200 family
+  authSuccess: (res: ExtendedNextApiResponse, mode: 0 | 1) => {
+    res.status(OK).json({
+      success: true,
+      message: `${mode === 0 ? "Login" : "Register"} success`,
+      response: {},
+    });
+    return responses.endSequence;
+  },
   success: (res: ExtendedNextApiResponse, response: any) => {
     res.status(OK).json({
       success: true,

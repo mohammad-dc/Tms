@@ -1,8 +1,10 @@
 import axios from "axios";
+import { getCookie } from "./cookiesServices";
 
 axios.interceptors.request.use(
   (conf: any) => {
-    //* for cookies or anything else
+    const token = getCookie("token");
+    conf.headers = { Authorization: "Bearer " + token };
     return conf;
   },
   (error) => {

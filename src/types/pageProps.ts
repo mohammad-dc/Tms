@@ -30,3 +30,8 @@ export type BoardProps = {
 export type BoardPageProps = {
   result: BoardProps;
 };
+
+export type UserProps = {
+  id: number;
+  boards: BoardProps[];
+};
