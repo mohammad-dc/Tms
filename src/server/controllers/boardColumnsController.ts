@@ -1,4 +1,6 @@
 import {
+  CreateBoardColumnRequestBodyType,
+  CreateBoardColumnResponseBodyType,
   DeleteBoardColumnRequestBodyType,
   DeleteBoardColumnResponseBodyType,
 } from "../../types/middlewares/boardColumns";
@@ -17,7 +19,26 @@ export const deleteBoardColumn: middlewareType<
 
     await _boardColumn.deleteBoardColumn(boardColumnId);
 
-    responses.deleteSuccess(res);
+    return responses.deleteSuccess(res);
+  } catch (error: any) {
+    throw new Error(error);
+  }
+};
+
+export const createBoardColumn: middlewareType<
+  CreateBoardColumnRequestBodyType,
+  CreateBoardColumnResponseBodyType
+> = async (req, res) => {
+  try {
+    const { boardId, name } = req.body;
+
+    const _boardColumnModel = new BoardColumns();
+
+    const boardColumn = await _boardColumnModel.createBoardColumn({
+      boardId,
+      name,
+    });
+    return responses.success(res, boardColumn);
   } catch (error: any) {
     throw new Error(error);
   }

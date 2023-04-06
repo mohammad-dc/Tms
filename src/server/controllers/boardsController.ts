@@ -40,7 +40,7 @@ export const createBoard: middlewareType<
       await _boardColumnModel.createManyColumns(_cols);
     }
 
-    responses.createdSuccess(res, board);
+    return responses.createdSuccess(res, board);
   } catch (error: any) {
     throw new Error(error);
   }
@@ -56,7 +56,7 @@ export const retrieveBoard: middlewareType<
     const _boardModel = new Boards();
 
     const board = await _boardModel.getOneBoard(boardId);
-    responses.success(res, board);
+    return responses.success(res, board);
   } catch (error: any) {
     throw new Error(error);
   }
@@ -70,7 +70,7 @@ export const getAllBoards: middlewareType<
     //* db model instance
     const _boardModel = new Boards();
     const boards = await _boardModel.getAllBoards();
-    responses.success(res, boards);
+    return responses.success(res, boards);
   } catch (error: any) {
     throw new Error(error);
   }
@@ -99,7 +99,7 @@ export const editBoard: middlewareType<
 
     const board = _boardModel.getOneBoard(boardId);
 
-    responses.updatedSuccess(res, board);
+    return responses.updatedSuccess(res, board);
   } catch (error: any) {
     throw new Error(error);
   }
@@ -117,7 +117,7 @@ export const deleteBoard: middlewareType<
 
     await _boardModel.deleteBoard(id);
 
-    responses.deleteSuccess(res);
+    return responses.deleteSuccess(res);
   } catch (error: any) {
     throw new Error(error);
   }

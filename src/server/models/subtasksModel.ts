@@ -39,13 +39,13 @@ export class Subtasks extends BaseModel {
 
   async completeSubtask(subtaskId: number, complete: boolean) {
     try {
-      await this.getModel().update({
+      const subtask = await this.getModel().update({
         where: { id: subtaskId },
         data: {
           isCompleted: complete,
         },
       });
-      return true;
+      return subtask;
     } catch (error: any) {
       throw new Error(error);
     }
