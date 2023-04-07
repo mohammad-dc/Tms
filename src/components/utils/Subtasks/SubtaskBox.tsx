@@ -1,6 +1,7 @@
 import { Box, Checkbox, HStack } from "@chakra-ui/react";
 import React, { useState } from "react";
 import { completeSubtask } from "../../../core/services/subtasksServices";
+import { useBoard } from "../../../context/boardsContext";
 
 interface ISubtaskBox {
   value: string;
@@ -16,7 +17,7 @@ export const SubtaskBox = ({ value, isCompleted, id }: ISubtaskBox) => {
         onChange={async (e) => {
           const isChecked = e.target.checked;
           setChecked(isChecked);
-          await completeSubtask({
+          const res = await completeSubtask({
             complete: isChecked,
             subtaskId: id,
           });

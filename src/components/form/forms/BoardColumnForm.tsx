@@ -6,6 +6,7 @@ import { BoardProps } from "../../../types/pageProps";
 import { TextBox } from "../inputs/TextBox";
 import { Button } from "../buttons/Button";
 import { VStack } from "@chakra-ui/react";
+import { useBoard } from "../../../context/boardsContext";
 
 interface IBoardColumnFormProps {
   board: BoardProps;
@@ -14,6 +15,8 @@ export const BoardColumnForm = ({ board }: IBoardColumnFormProps) => {
   const initialValues = {
     name: "",
   };
+
+  const { insertColumn } = useBoard();
   return (
     <Formik
       initialValues={initialValues}
@@ -21,7 +24,8 @@ export const BoardColumnForm = ({ board }: IBoardColumnFormProps) => {
       onSubmit={async (values, actions) => {
         try {
           actions.setSubmitting(true);
-          await createBoardColumn({ ...values, boardId: board.id });
+          const res = await createBoardColumn({ ...values, boardId: board.id });
+          insertColumn({ ...res.response, tasks: [] });
           actions.setSubmitting(false);
         } catch (error: any) {
           alert(error.response.data.message);

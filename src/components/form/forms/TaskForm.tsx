@@ -56,7 +56,7 @@ export const TaskForm = ({ board, mode = "add", task }: ITaskFormProps) => {
 
         if (mode === "add") {
           const res = await createTask(payload);
-          insertTask(res.response.task);
+          insertTask(res.response);
         } else {
           task?.id && (await editTask({ ...payload, taskId: task?.id }));
         }

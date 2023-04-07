@@ -10,7 +10,7 @@ export type CreateBoardBodyRequestType = {
 export type CreateBoardBodyResponseType = {
   success: boolean;
   message: string;
-  response: { result: BoardType };
+  response: BoardType;
 };
 
 //* retrieve endpoint
