@@ -38,7 +38,7 @@ export const createBoardColumn: middlewareType<
       boardId,
       name,
     });
-    return responses.success(res, boardColumn);
+    return responses.createdSuccess(res, boardColumn);
   } catch (error: any) {
     throw new Error(error);
   }

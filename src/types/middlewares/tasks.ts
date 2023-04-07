@@ -11,7 +11,7 @@ export type CreateTaskRequestBodyType = {
 export type CreateTaskResponseBodyType = {
   success: boolean;
   message: string;
-  task: TaskProps;
+  response: TaskProps;
 };
 
 //* edit task

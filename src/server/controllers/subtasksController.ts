@@ -43,7 +43,8 @@ export const completeSubtask: middlewareType<
 
     const mode = complete ? "inc" : "dec";
     await _taskModel.inCDecSubtaskCount(mode, subtask.taskId, 1);
-    return responses.updatedSuccess(res, {});
+    const task = await _taskModel.getOneTaskById(subtask.taskId);
+    return responses.updatedSuccess(res, task);
   } catch (error: any) {
     throw new Error(error);
   }

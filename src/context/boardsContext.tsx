@@ -1,12 +1,19 @@
 import { createContext, useContext, useState } from "react";
 import { boardContextType } from "../types/context";
 import { BoardType } from "../types/middlewares/boards";
-import { BoardProps, TaskProps } from "../types/pageProps";
+import {
+  BoardColumnProps,
+  BoardProps,
+  SubtasksProps,
+  TaskProps,
+} from "../types/pageProps";
 
 const boardContextDefaultValues: boardContextType = {
   boards: [],
   activeBoard: undefined,
   saveActiveBoard: () => {},
+  insertColumn: () => {},
+  insertSubtasks: () => {},
   insertTask: () => {},
   insertMany: () => {},
   insertOne: () => {},
@@ -26,6 +33,14 @@ export function BoardsProvider({ children }: { children: React.ReactNode }) {
     setBoards([...boards, board]);
   };
 
+  const insertColumn = (boardColumn: BoardColumnProps) => {
+    const columns = activeBoard?.boardColumns;
+    if (columns) {
+      columns.push(boardColumn);
+      setActiveBoard({ ...activeBoard, boardColumns: columns });
+    }
+  };
+
   const insertMany = (boards: BoardType[]) => {
     setBoards(boards);
   };
@@ -35,12 +50,27 @@ export function BoardsProvider({ children }: { children: React.ReactNode }) {
   };
 
   const insertTask = (task: TaskProps) => {
-    const newColumnsList = activeBoard?.boardColumns;
-    if (newColumnsList) {
-      for (let _col of newColumnsList) {
+    const columns = activeBoard?.boardColumns;
+    if (columns) {
+      for (let _col of columns) {
         if (_col.id === task.boardCols) _col.tasks.push(task);
       }
-      setActiveBoard({ ...activeBoard, boardColumns: newColumnsList });
+      setActiveBoard({ ...activeBoard, boardColumns: columns });
+    }
+  };
+
+  const insertSubtasks = (subtasks: SubtasksProps[], taskId: number) => {
+    const columns = activeBoard?.boardColumns;
+    if (columns) {
+      for (let _col of columns) {
+        for (let _task of _col.tasks) {
+          if (_task.id === taskId) {
+            _task.subTasks = subtasks;
+          }
+        }
+      }
+      console.log({ columns });
+      setActiveBoard({ ...activeBoard, boardColumns: columns });
     }
   };
 
@@ -48,6 +78,8 @@ export function BoardsProvider({ children }: { children: React.ReactNode }) {
     boards,
     activeBoard,
     saveActiveBoard,
+    insertColumn,
+    insertSubtasks,
     insertTask,
     insertOne,
     insertMany,

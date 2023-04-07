@@ -10,6 +10,7 @@ import { Button } from "../buttons/Button";
 import { LabelInput } from "../inputs/LabelInput";
 import { SubTextBox } from "../inputs/SubTextBox";
 import { TextBox } from "../inputs/TextBox";
+import { useBoard } from "../../../context/boardsContext";
 
 interface IBoardFormProps {
   board?: BoardProps;
@@ -27,28 +28,43 @@ export const BoardForm = ({ board, mode = "add" }: IBoardFormProps) => {
 
   const toast = useToast();
 
+  const { insertOne } = useBoard();
+
   return (
     <Formik
       initialValues={initialValues}
       validationSchema={boardSchema}
       onSubmit={async (values, actions) => {
-        actions.setSubmitting(true);
-        const columns = [];
-        for (let col of values.columns) {
-          if (col.isNew) columns.push(col.value);
+        try {
+          actions.setSubmitting(true);
+          const columns = [];
+          for (let col of values.columns) {
+            if (col.isNew) columns.push(col.value);
+          }
+          const payload = { name: values.name, columns };
+          //* send request to create new board to server
+          let res;
+          if (mode === "add") {
+            res = await createBoard(payload);
+            insertOne(res.response);
+          } else {
+            if (board) {
+              res = await editBoard({ ...payload, boardId: board?.id });
+            }
+          }
+          actions.setSubmitting(false);
+          toast({
+            title: res?.message,
+            status: "success",
+            isClosable: true,
+          });
+        } catch (error: any) {
+          toast({
+            title: error?.response?.data?.message,
+            status: "error",
+            isClosable: true,
+          });
         }
-        const payload = { name: values.name, columns };
-        //* send request to create new board to server
-        const res =
-          mode === "add"
-            ? await createBoard(payload)
-            : board && (await editBoard({ ...payload, boardId: board?.id }));
-        actions.setSubmitting(false);
-        toast({
-          title: res?.message,
-          status: "success",
-          isClosable: true,
-        });
       }}
     >
       {({ isSubmitting, errors, touched, values }) => (
